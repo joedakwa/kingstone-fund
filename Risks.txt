@@ -43,7 +43,73 @@ Then, check if the price has changed before the deposit process and revert if so
 
 ---------------------------------
 
+[M] endIndex and startIndex lengths are not checked leading to out of bounds access
 
+In depositsOfOwnerInRange, the function loops through the deposits array and returns the deposits
+for a given user.
+
+However, function does not sufficiently validate the input parameters startIndex and endIndex. 
+Without proper validation, these values can be manipulated, leading to unexpected behavior or errors.
+
+uint256 length = endIndex - startIndex;
+
+Consider adding the below, before the division calculation difference
+ check to the function that checks if the startIndex and endIndex are within
+the bounds of the deposits array. Then you can conduct the division.
+
+require(startIndex <= endIndex, "Invalid range");
+
+Then you can add the rest of the below logic to further validate the input parameters.
+
+  uint256 userDepositCount = userIDs[owner].length;
+    require(endIndex <= userDepositCount, "End index exceeds user's deposit count");
+    
+    uint256 length = endIndex - startIndex;
+    DepositInfo[] memory userDeposits = new DepositInfo[](length);
+
+The function should look something like this:
+
+function depositsOfOwnerInRange(address owner, uint startIndex, uint endIndex) external view returns (DepositInfo[] memory) {
+    require(startIndex <= endIndex, "Invalid range");
+    
+    uint256 userDepositCount = userIDs[owner].length;
+    require(endIndex <= userDepositCount, "End index exceeds user's deposit count");
+    
+    uint256 length = endIndex - startIndex;
+    DepositInfo[] memory userDeposits = new DepositInfo[](length);
+
+    for (uint256 i = startIndex; i < endIndex; i++) {
+        // Check if a deposit exists for this ID
+        if (i < userDepositCount) {
+            userDeposits[i - startIndex] = deposits[userIDs[owner][i]];
+        }
+    }
+
+    return userDeposits;
+}
+
+
+[M] depositsOfOwnerInRange does not check if the user has any deposits
+
+In depositsOfOwnerInRange, the function loops through the deposits array and returns the deposits.
+
+The current implementation of the depositsOfOwnerInRange function does not check whether a 
+deposit exists for a particular ID. As a result, if there are gaps in the deposit IDs 
+(e.g., if some deposits have been deleted), the resulting array may contain uninitialized or empty elements.
+
+The loop used to retrieve deposit information does not check whether a deposit exists for a particular ID. 
+As a result, if there are gaps in the deposit IDs (e.g., if some deposits have been deleted), 
+the resulting array may contain uninitialized or empty elements.
+
+Mitigation:
+
+Consider adding a check to the loop that checks if the deposit exists for a particular ID.
+
+if (i < userDepositCount) {
+        userDeposits[i - startIndex] = deposits[userIDs[owner][i]];
+    }
+
+    
 
 
 
@@ -52,6 +118,5 @@ Then, check if the price has changed before the deposit process and revert if so
 
 [M] Out of bounds array in depositsof and potentially depositsOfOwnerInRange
 
-Also, startIndex and endIndex are not checked in depositsOfOwnerInRange
 
 [M] does deposit actually receive BUSD?
