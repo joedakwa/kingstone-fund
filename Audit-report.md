@@ -73,8 +73,7 @@ The following smart contracts were in scope of the audit:
 
 | ID     | Title                   | Severity | Status |
 | ------ | ----------------------- | -------- | ------ |
-| [H-01] | Owner can change price variable whilst the deposit function is executing which can result in loss
-of funds for early depositors. | High | TBD |
+| [H-01] | Owner can change price variable whilst the deposit function is executing which can result in loss of funds for early depositors. | High | TBD |
 | [M-01] | endIndex and startIndex lengths are not checked leading to out of bounds access    | Medium   | TBD    |
 | [M-02] | depositsOfOwnerInRange does not check if the user has any deposits | Medium | TBD |
 | [L-02] | Use a two-step ownership transfer approach | Low | TBD |
