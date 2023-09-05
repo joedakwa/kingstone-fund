@@ -98,8 +98,8 @@ In function deposit, users deposit packages into the fund.
 Once deposited, the fund stores the package and deposit info in the deposits array.
 
 '''
-// store deposited package amount on storage
-        deposits[id] = DepositInfo(_msgSender(), amount, busdAmount, block.timestamp);
+// store deposited package amount on storage 
+deposits[id] = DepositInfo(_msgSender(), amount, busdAmount, block.timestamp);
 '''
 
 The public price variable of 250 eth, prior to this, is checked against the amount of BUSD sent by the user.
