@@ -98,7 +98,7 @@ In function deposit, users deposit packages into the fund.
 Once deposited, the fund stores the package and deposit info in the deposits array.
 
 '''
-   // store deposited package amount on storage
+// store deposited package amount on storage
         deposits[id] = DepositInfo(_msgSender(), amount, busdAmount, block.timestamp);
 '''
 
@@ -113,6 +113,7 @@ However, the vulnerability comes from the fact that before the transaction is co
 the owner can change the price variable.
 
 '''solidity
+
     function setPackagePrice(uint newPrice) external onlyOwner {
         require(newPrice > 0, 'Zero Price');
         price = newPrice;
