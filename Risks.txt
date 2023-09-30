@@ -1,4 +1,4 @@
-[M] Owner can change price variable whilst the deposit function is executing which can result in loss
+[H] Owner can change price variable whilst the deposit function is executing which can result in loss
 of funds for early depositors.
 
 In function depost, users deposit packages into the fund.
@@ -109,7 +109,7 @@ if (i < userDepositCount) {
         userDeposits[i - startIndex] = deposits[userIDs[owner][i]];
     }
 
-    
+
 
 
 
